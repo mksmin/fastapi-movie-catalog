@@ -9,7 +9,7 @@ Right click `movie-catalog` -> Mark directory as ->  Sources Root
 
 Go to work dir:
 ```shell
-cd url-shortener
+cd movie-catalog
 ```
 
 Run dev server:
