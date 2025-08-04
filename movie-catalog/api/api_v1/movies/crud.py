@@ -2,19 +2,19 @@ from schemas.movies import Movie
 
 MOVIES = [
     Movie(
-        id=1,
+        slug="ring_owner",
         title="Властелин Колец",
         description="""Храбрый хоббит Фродо Бэггинс женился на дочери короля Саурон.""",
         rating=9.5,
     ),
     Movie(
-        id=2,
+        slug="shawshank_redemption",
         title="Побег из Шоушенка",
         description="""Джон Трэйси — молодой драматург, который обрел многое от своей мечты в жизни.""",
         rating=7.3,
     ),
     Movie(
-        id=3,
+        slug="spiderman",
         title="Человек-паук",
         description="""Странный парень в красном костюме мешает жить людям стреляя в них пауками.""",
         rating=8.2,
