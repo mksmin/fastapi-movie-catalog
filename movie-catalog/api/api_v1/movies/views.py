@@ -11,8 +11,8 @@ from fastapi import (
 )
 from typing import Annotated
 
-from .crud import MOVIES
-from .dependencies import get_movie_by_id
+from .crud import storage
+from .dependencies import get_movie_by_slug
 from schemas.movies import Movie, MovieCreateSchema
 
 router = APIRouter(
@@ -25,17 +25,15 @@ router = APIRouter(
     "/",
     response_model=list[Movie],
 )
-def get_movies():
-    return MOVIES
+def get_movies() -> list[Movie]:
+    return storage.get()
 
 
 @router.post("/", response_model=Movie, status_code=status.HTTP_201_CREATED)
 def create_movie(
     movie_create: MovieCreateSchema,
-):
-    return Movie(
-        **movie_create.dict(),
-    )
+) -> Movie:
+    return storage.create(movie_create)
 
 
 @router.get(
@@ -45,7 +43,7 @@ def create_movie(
 def get_movie(
     movie: Annotated[
         Movie,
-        Depends(get_movie_by_id),
+        Depends(get_movie_by_slug),
     ],
-):
+) -> Movie:
     return movie

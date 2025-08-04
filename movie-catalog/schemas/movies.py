@@ -26,7 +26,7 @@ class MovieCreateSchema(MovieBase):
     ]
     slug: Annotated[
         str,
-        Len(min_length=3, max_length=15),
+        Len(min_length=3, max_length=50),
     ]
     rating: Annotated[
         int,

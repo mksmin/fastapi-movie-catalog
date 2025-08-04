@@ -2,17 +2,15 @@ import random
 
 from fastapi import HTTPException, status
 
-from .crud import MOVIES
+from .crud import storage
 from schemas.movies import Movie
 
 
-def get_movie_by_id(
+def get_movie_by_slug(
     movie_slug: str,
 ):
-    movie: Movie | None = next(
-        (movie for movie in MOVIES if movie.slug == movie_slug),
-        None,
-    )
+    movie: Movie | None = storage.get_by_slug(slug=movie_slug)
+
     if movie:
         return movie
     raise HTTPException(
