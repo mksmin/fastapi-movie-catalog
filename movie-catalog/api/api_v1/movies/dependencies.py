@@ -15,5 +15,5 @@ def get_movie_by_slug(
         return movie
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail="Movie not found",
+        detail=f"Movie {movie_slug!r} not found",
     )
