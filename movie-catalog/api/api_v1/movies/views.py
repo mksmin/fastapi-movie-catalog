@@ -12,7 +12,7 @@ from fastapi import (
 from typing import Annotated
 
 from .crud import MOVIES
-from .dependencies import get_movie_by_id, set_movie_id
+from .dependencies import get_movie_by_id
 from schemas.movies import Movie, MovieCreateSchema
 
 router = APIRouter(
@@ -34,13 +34,12 @@ def create_movie(
     movie_create: MovieCreateSchema,
 ):
     return Movie(
-        id=set_movie_id(),
         **movie_create.dict(),
     )
 
 
 @router.get(
-    "/{movie_id}",
+    "/{movie_slug}",
     response_model=Movie,
 )
 def get_movie(
