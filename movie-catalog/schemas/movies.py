@@ -3,6 +3,20 @@ from typing import Annotated
 
 from pydantic import BaseModel
 
+TitleString = Annotated[
+    str,
+    Len(min_length=1, max_length=100),
+]
+DescriptionString = Annotated[
+    str,
+    MaxLen(200),
+]
+RatingInteger = Annotated[
+    int,
+    Ge(1),
+    Le(10),
+]
+
 
 class MovieBase(BaseModel):
     title: str
@@ -15,23 +29,13 @@ class MovieCreateSchema(MovieBase):
     Модель для создания фильма
     """
 
-    title: Annotated[
-        str,
-        Len(min_length=1, max_length=100),
-    ]
-    description: Annotated[
-        str,
-        MaxLen(200),
-    ]
+    title: TitleString
+    description: DescriptionString
     slug: Annotated[
         str,
         Len(min_length=3, max_length=50),
     ]
-    rating: Annotated[
-        int,
-        Ge(1),
-        Le(10),
-    ]
+    rating: RatingInteger
 
 
 class MovieUpdateSchema(MovieBase):
@@ -39,19 +43,19 @@ class MovieUpdateSchema(MovieBase):
     Модель для обновления фильма
     """
 
-    title: Annotated[
-        str,
-        Len(min_length=1, max_length=100),
-    ]
-    description: Annotated[
-        str,
-        MaxLen(200),
-    ]
-    rating: Annotated[
-        int,
-        Ge(1),
-        Le(10),
-    ]
+    title: TitleString
+    description: DescriptionString
+    rating: RatingInteger
+
+
+class MovieUpdatePartialSchema(MovieBase):
+    """
+    Модель для частичного обновления фильма
+    """
+
+    title: TitleString | None = None
+    description: DescriptionString | None = None
+    rating: RatingInteger | None = None
 
 
 class Movie(MovieBase):
