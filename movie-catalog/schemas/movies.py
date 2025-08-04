@@ -58,9 +58,24 @@ class MovieUpdatePartialSchema(MovieBase):
     rating: RatingInteger | None = None
 
 
+class MovieRead(MovieBase):
+    """
+    Модель для чтения фильма
+    """
+
+    slug: str
+
+
 class Movie(MovieBase):
     """
     Модель для представления фильма в API.
     """
 
     slug: str
+    notes: (
+        Annotated[
+            str,
+            MaxLen(300),
+        ]
+        | None
+    ) = None

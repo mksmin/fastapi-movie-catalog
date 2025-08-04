@@ -4,7 +4,7 @@ from fastapi import (
 )
 
 from api.api_v1.movies.crud import storage
-from schemas.movies import Movie, MovieCreateSchema
+from schemas.movies import Movie, MovieCreateSchema, MovieRead
 
 router = APIRouter(
     prefix="/movies",
@@ -14,13 +14,13 @@ router = APIRouter(
 
 @router.get(
     "/",
-    response_model=list[Movie],
+    response_model=list[MovieRead],
 )
 def get_movies() -> list[Movie]:
     return storage.get()
 
 
-@router.post("/", response_model=Movie, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=MovieRead, status_code=status.HTTP_201_CREATED)
 def create_movie(
     movie_create: MovieCreateSchema,
 ) -> Movie:

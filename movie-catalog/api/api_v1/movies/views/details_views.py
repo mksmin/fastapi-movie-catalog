@@ -11,6 +11,7 @@ from schemas.movies import (
     Movie,
     MovieUpdateSchema,
     MovieUpdatePartialSchema,
+    MovieRead,
 )
 
 router = APIRouter(
@@ -37,7 +38,7 @@ MovieBySlug = Annotated[
 
 @router.get(
     "/",
-    response_model=Movie,
+    response_model=MovieRead,
 )
 def get_movie(
     movie: MovieBySlug,
@@ -47,7 +48,7 @@ def get_movie(
 
 @router.put(
     "/",
-    response_model=Movie,
+    response_model=MovieRead,
 )
 def update_movie(
     movie: MovieBySlug,
@@ -61,7 +62,7 @@ def update_movie(
 
 @router.patch(
     "/",
-    response_model=Movie,
+    response_model=MovieRead,
 )
 def update_movie_partial(
     movie: MovieBySlug,
