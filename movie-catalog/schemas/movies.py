@@ -24,7 +24,7 @@ class MovieBase(BaseModel):
     rating: float
 
 
-class MovieCreateSchema(MovieBase):
+class MovieCreate(MovieBase):
     """
     Модель для создания фильма
     """
@@ -38,7 +38,7 @@ class MovieCreateSchema(MovieBase):
     rating: RatingInteger
 
 
-class MovieUpdateSchema(MovieBase):
+class MovieUpdate(MovieBase):
     """
     Модель для обновления фильма
     """
@@ -48,7 +48,7 @@ class MovieUpdateSchema(MovieBase):
     rating: RatingInteger
 
 
-class MovieUpdatePartialSchema(MovieBase):
+class MovieUpdatePartial(MovieBase):
     """
     Модель для частичного обновления фильма
     """

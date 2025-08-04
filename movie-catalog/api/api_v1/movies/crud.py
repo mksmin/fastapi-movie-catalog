@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from schemas.movies import (
     Movie,
-    MovieCreateSchema,
-    MovieUpdateSchema,
-    MovieUpdatePartialSchema,
+    MovieCreate,
+    MovieUpdate,
+    MovieUpdatePartial,
 )
 
 
@@ -16,7 +16,7 @@ class MovieStorage(BaseModel):
     def get_by_slug(self, slug: str) -> Movie | None:
         return self.slug_to_movie.get(slug)
 
-    def create(self, movie: MovieCreateSchema) -> Movie:
+    def create(self, movie: MovieCreate) -> Movie:
         movie = Movie(
             **movie.model_dump(),
         )
@@ -32,7 +32,7 @@ class MovieStorage(BaseModel):
     def update(
         self,
         movie: Movie,
-        movie_in: MovieUpdateSchema,
+        movie_in: MovieUpdate,
     ) -> Movie:
         for field_name, value in movie_in:
             setattr(movie, field_name, value)
@@ -41,7 +41,7 @@ class MovieStorage(BaseModel):
     def update_partial(
         self,
         movie: Movie,
-        movie_in: MovieUpdatePartialSchema,
+        movie_in: MovieUpdatePartial,
     ) -> Movie:
         for field_name, value in movie_in.model_dump(exclude_unset=True).items():
             setattr(movie, field_name, value)
@@ -51,7 +51,7 @@ class MovieStorage(BaseModel):
 storage = MovieStorage()
 
 storage.create(
-    MovieCreateSchema(
+    MovieCreate(
         slug="ring_owner",
         title="Властелин Колец",
         description="""Храбрый хоббит Фродо Бэггинс женился на дочери короля Саурон.""",
@@ -59,7 +59,7 @@ storage.create(
     )
 )
 storage.create(
-    MovieCreateSchema(
+    MovieCreate(
         slug="shawshank_redemption",
         title="Побег из Шоушенка",
         description="""Джон Трэйси — молодой драматург, который обрел многое от своей мечты в жизни.""",
@@ -67,7 +67,7 @@ storage.create(
     )
 )
 storage.create(
-    MovieCreateSchema(
+    MovieCreate(
         slug="spiderman",
         title="Человек-паук",
         description="""Странный парень в красном костюме мешает жить людям стреляя в них пауками.""",

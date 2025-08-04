@@ -9,8 +9,8 @@ from api.api_v1.movies.crud import storage
 from api.api_v1.movies.dependencies import get_movie_by_slug
 from schemas.movies import (
     Movie,
-    MovieUpdateSchema,
-    MovieUpdatePartialSchema,
+    MovieUpdate,
+    MovieUpdatePartial,
     MovieRead,
 )
 
@@ -52,7 +52,7 @@ def get_movie(
 )
 def update_movie(
     movie: MovieBySlug,
-    movie_in: MovieUpdateSchema,
+    movie_in: MovieUpdate,
 ) -> Movie:
     return storage.update(
         movie=movie,
@@ -66,7 +66,7 @@ def update_movie(
 )
 def update_movie_partial(
     movie: MovieBySlug,
-    movie_in: MovieUpdatePartialSchema,
+    movie_in: MovieUpdatePartial,
 ) -> Movie:
     return storage.update_partial(
         movie=movie,
