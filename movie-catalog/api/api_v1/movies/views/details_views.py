@@ -7,7 +7,7 @@ from typing import Annotated
 
 from api.api_v1.movies.crud import storage
 from api.api_v1.movies.dependencies import get_movie_by_slug
-from schemas.movies import Movie
+from schemas.movies import Movie, MovieUpdateSchema
 
 router = APIRouter(
     prefix="/{movie_slug}",
@@ -25,18 +25,34 @@ router = APIRouter(
     },
 )
 
+MovieBySlug = Annotated[
+    Movie,
+    Depends(get_movie_by_slug),
+]
+
 
 @router.get(
     "/",
     response_model=Movie,
 )
 def get_movie(
-    movie: Annotated[
-        Movie,
-        Depends(get_movie_by_slug),
-    ],
+    movie: MovieBySlug,
 ) -> Movie:
     return movie
+
+
+@router.put(
+    "/",
+    response_model=Movie,
+)
+def update_movie(
+    movie: MovieBySlug,
+    movie_in: MovieUpdateSchema,
+) -> Movie:
+    return storage.update(
+        movie=movie,
+        movie_in=movie_in,
+    )
 
 
 @router.delete(
@@ -44,9 +60,6 @@ def get_movie(
     status_code=status.HTTP_204_NO_CONTENT,
 )
 def delete_movie(
-    movie: Annotated[
-        Movie,
-        Depends(get_movie_by_slug),
-    ],
+    movie: MovieBySlug,
 ) -> None:
     storage.delete(movie)
