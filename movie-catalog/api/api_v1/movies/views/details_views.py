@@ -7,7 +7,11 @@ from typing import Annotated
 
 from api.api_v1.movies.crud import storage
 from api.api_v1.movies.dependencies import get_movie_by_slug
-from schemas.movies import Movie, MovieUpdateSchema
+from schemas.movies import (
+    Movie,
+    MovieUpdateSchema,
+    MovieUpdatePartialSchema,
+)
 
 router = APIRouter(
     prefix="/{movie_slug}",
@@ -50,6 +54,20 @@ def update_movie(
     movie_in: MovieUpdateSchema,
 ) -> Movie:
     return storage.update(
+        movie=movie,
+        movie_in=movie_in,
+    )
+
+
+@router.patch(
+    "/",
+    response_model=Movie,
+)
+def update_movie_partial(
+    movie: MovieBySlug,
+    movie_in: MovieUpdatePartialSchema,
+) -> Movie:
+    return storage.update_partial(
         movie=movie,
         movie_in=movie_in,
     )
