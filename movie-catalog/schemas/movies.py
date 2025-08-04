@@ -8,6 +8,7 @@ class MovieBase(BaseModel):
     title: str
     description: str
     rating: float
+    slug: str
 
 
 class MovieCreateSchema(MovieBase):
@@ -23,6 +24,10 @@ class MovieCreateSchema(MovieBase):
         str,
         Len(min_length=10, max_length=250),
     ]
+    slug: Annotated[
+        str,
+        Len(min_length=3, max_length=15),
+    ]
     rating: Annotated[
         int,
         Ge(1),
@@ -34,5 +39,3 @@ class Movie(MovieBase):
     """
     Модель для представления фильма в API.
     """
-
-    id: int
