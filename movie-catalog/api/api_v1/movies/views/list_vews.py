@@ -1,15 +1,15 @@
 from fastapi import (
     APIRouter,
     status,
-    BackgroundTasks,
+    Depends,
 )
 
 from api.api_v1.movies.crud import storage
+from api.api_v1.movies.dependencies import storage_save_state
 from schemas.movies import Movie, MovieCreate, MovieRead
 
 router = APIRouter(
-    prefix="/movies",
-    tags=["Movies"],
+    prefix="/movies", tags=["Movies"], dependencies=[Depends(storage_save_state)]
 )
 
 
@@ -24,8 +24,5 @@ def get_movies() -> list[Movie]:
 @router.post("/", response_model=MovieRead, status_code=status.HTTP_201_CREATED)
 def create_movie(
     movie_create: MovieCreate,
-    background_tasks: BackgroundTasks,
 ) -> Movie:
-    movie = storage.create(movie_create)
-    background_tasks.add_task(storage.save_state)
-    return movie
+    return storage.create(movie_create)

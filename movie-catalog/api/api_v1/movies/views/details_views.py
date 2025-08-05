@@ -2,7 +2,6 @@ from fastapi import (
     APIRouter,
     Depends,
     status,
-    BackgroundTasks,
 )
 from typing import Annotated
 
@@ -54,14 +53,11 @@ def get_movie(
 def update_movie(
     movie: MovieBySlug,
     movie_in: MovieUpdate,
-    background_tasks: BackgroundTasks,
 ) -> Movie:
-    movie = storage.update(
+    return storage.update(
         movie=movie,
         movie_in=movie_in,
     )
-    background_tasks.add_task(storage.save_state)
-    return movie
 
 
 @router.patch(
@@ -71,14 +67,11 @@ def update_movie(
 def update_movie_partial(
     movie: MovieBySlug,
     movie_in: MovieUpdatePartial,
-    background_tasks: BackgroundTasks,
 ) -> Movie:
-    movie = storage.update_partial(
+    return storage.update_partial(
         movie=movie,
         movie_in=movie_in,
     )
-    background_tasks.add_task(storage.save_state)
-    return movie
 
 
 @router.delete(
@@ -87,7 +80,5 @@ def update_movie_partial(
 )
 def delete_movie(
     movie: MovieBySlug,
-    background_tasks: BackgroundTasks,
 ) -> None:
     storage.delete(movie)
-    background_tasks.add_task(storage.save_state)
