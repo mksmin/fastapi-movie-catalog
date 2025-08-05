@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from pydantic import BaseModel, ValidationError
 from pydantic_core import from_json
@@ -11,6 +12,8 @@ from schemas.movies import (
     MovieRead,
 )
 
+log = logging.getLogger(__name__)
+
 
 class MovieStorage(BaseModel):
     slug_to_movie: dict[str, Movie] = {}
@@ -19,10 +22,12 @@ class MovieStorage(BaseModel):
         USER_DATA_STORAGE_FILEPATH.write_text(
             self.model_dump_json(indent=4), encoding="utf-8"
         )
+        log.info("Saved state to storage file")
 
     @classmethod
     def from_state(cls) -> "MovieStorage":
         if not USER_DATA_STORAGE_FILEPATH.exists():
+            log.info("Movie storage file doesn't exist")
             return MovieStorage()
         return cls.model_validate_json(USER_DATA_STORAGE_FILEPATH.read_text())
 
@@ -37,6 +42,7 @@ class MovieStorage(BaseModel):
             **movie.model_dump(),
         )
         self.slug_to_movie[movie.slug] = movie
+        log.info("Created movie with slug '%s'", movie.slug)
         self.save_state()
         return movie
 
@@ -74,9 +80,11 @@ storage = MovieStorage()
 
 try:
     storage = MovieStorage.from_state()
+    log.warning("Recovered data from storage file")
 except ValidationError as e:
     storage = MovieStorage()
     storage.save_state()
+    log.warning("Rewritten storage file due to validation error")
 
 storage.create(
     MovieCreate(
