@@ -31,6 +31,19 @@ class MovieStorage(BaseModel):
             return MovieStorage()
         return cls.model_validate_json(USER_DATA_STORAGE_FILEPATH.read_text())
 
+    def init_storage_from_state(self):
+        try:
+            data = MovieStorage.from_state()
+        except ValidationError:
+            self.save_state()
+            log.warning("Rewritten storage file due to validation error")
+            return
+
+        self.slug_to_movie.update(
+            data.slug_to_movie,
+        )
+        log.warning("Recovered data from storage file.")
+
     def get(self) -> list[Movie]:
         return list(self.slug_to_movie.values())
 
@@ -78,35 +91,28 @@ class MovieStorage(BaseModel):
 
 storage = MovieStorage()
 
-try:
-    storage = MovieStorage.from_state()
-    log.warning("Recovered data from storage file")
-except ValidationError as e:
-    storage = MovieStorage()
-    storage.save_state()
-    log.warning("Rewritten storage file due to validation error")
 
-storage.create(
-    MovieCreate(
-        slug="ring_owner",
-        title="Властелин Колец",
-        description="""Храбрый хоббит Фродо Бэггинс женился на дочери короля Саурон.""",
-        rating=9,
-    )
-)
-storage.create(
-    MovieCreate(
-        slug="shawshank_redemption",
-        title="Побег из Шоушенка",
-        description="""Джон Трэйси — молодой драматург, который обрел многое от своей мечты в жизни.""",
-        rating=7,
-    )
-)
-storage.create(
-    MovieCreate(
-        slug="spiderman",
-        title="Человек-паук",
-        description="""Странный парень в красном костюме мешает жить людям стреляя в них пауками.""",
-        rating=8,
-    )
-)
+# storage.create(
+#     MovieCreate(
+#         slug="ring_owner",
+#         title="Властелин Колец",
+#         description="""Храбрый хоббит Фродо Бэггинс женился на дочери короля Саурон.""",
+#         rating=9,
+#     )
+# )
+# storage.create(
+#     MovieCreate(
+#         slug="shawshank_redemption",
+#         title="Побег из Шоушенка",
+#         description="""Джон Трэйси — молодой драматург, который обрел многое от своей мечты в жизни.""",
+#         rating=7,
+#     )
+# )
+# storage.create(
+#     MovieCreate(
+#         slug="spiderman",
+#         title="Человек-паук",
+#         description="""Странный парень в красном костюме мешает жить людям стреляя в них пауками.""",
+#         rating=8,
+#     )
+# )
