@@ -30,7 +30,11 @@ class MovieStorage(BaseModel):
         if not USER_DATA_STORAGE_FILEPATH.exists():
             log.info("Movie storage file doesn't exist")
             return MovieStorage()
-        return cls.model_validate_json(USER_DATA_STORAGE_FILEPATH.read_text())
+        return cls.model_validate_json(
+            USER_DATA_STORAGE_FILEPATH.read_text(
+                encoding="utf-8",
+            )
+        )
 
     def init_storage_from_state(self):
         try:
