@@ -20,7 +20,8 @@ class MovieStorage(BaseModel):
 
     def save_state(self) -> None:
         USER_DATA_STORAGE_FILEPATH.write_text(
-            self.model_dump_json(indent=4), encoding="utf-8"
+            self.model_dump_json(indent=4),
+            encoding="utf-8",
         )
         log.info("Saved state to storage file")
 

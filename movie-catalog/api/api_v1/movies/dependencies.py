@@ -1,11 +1,15 @@
 import logging
+from typing import Annotated
+
 from fastapi import (
     HTTPException,
     status,
     BackgroundTasks,
     Request,
+    Query,
 )
 
+from core.config import API_TOKENS
 from .crud import storage
 from schemas.movies import Movie
 
@@ -41,3 +45,20 @@ def storage_save_state(
     if request.method in UNSAFE_METHODS:
         log.info("Saving state in background")
         background_tasks.add_task(storage.save_state)
+
+
+def api_token_required(
+    request: Request,
+    api_token: Annotated[
+        str,
+        Query(),
+    ] = "",
+) -> None:
+    if request.method not in UNSAFE_METHODS:
+        return
+
+    if api_token not in API_TOKENS:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid API token",
+        )

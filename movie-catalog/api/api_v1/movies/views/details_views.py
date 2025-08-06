@@ -6,7 +6,7 @@ from fastapi import (
 from typing import Annotated
 
 from api.api_v1.movies.crud import storage
-from api.api_v1.movies.dependencies import get_movie_by_slug
+from api.api_v1.movies.dependencies import get_movie_by_slug, api_token_required
 from schemas.movies import (
     Movie,
     MovieUpdate,
@@ -53,6 +53,7 @@ def get_movie(
 def update_movie(
     movie: MovieBySlug,
     movie_in: MovieUpdate,
+    _=Depends(api_token_required),
 ) -> Movie:
     return storage.update(
         movie=movie,
@@ -67,6 +68,7 @@ def update_movie(
 def update_movie_partial(
     movie: MovieBySlug,
     movie_in: MovieUpdatePartial,
+    _=Depends(api_token_required),
 ) -> Movie:
     return storage.update_partial(
         movie=movie,
@@ -80,5 +82,6 @@ def update_movie_partial(
 )
 def delete_movie(
     movie: MovieBySlug,
+    _=Depends(api_token_required),
 ) -> None:
     storage.delete(movie)
