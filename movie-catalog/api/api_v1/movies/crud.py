@@ -1,15 +1,13 @@
 import logging
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 from redis import Redis
 
 from core import config
-from core.config import USER_DATA_STORAGE_FILEPATH
 from schemas.movies import (
     Movie,
     MovieCreate,
     MovieUpdate,
     MovieUpdatePartial,
-    MovieRead,
 )
 
 log = logging.getLogger(__name__)
@@ -19,6 +17,18 @@ redis_movie = Redis(
     db=config.REDIS_MOVIE_DB,
     decode_responses=True,
 )
+
+
+class MovieBaseError(Exception):
+    """
+    Base exception for movie CRUD actions
+    """
+
+
+class MovieAlreadyExistsError(MovieBaseError):
+    """
+    Raised on movie creation if such slug already exists
+    """
 
 
 class MovieStorage(BaseModel):
@@ -45,13 +55,25 @@ class MovieStorage(BaseModel):
         )
         return Movie.model_validate_json(movie) if movie else None
 
-    def create(self, movie: MovieCreate) -> Movie:
+    def exists(self, slug: str) -> bool:
+        return redis_movie.hexists(
+            name=config.REDIS_MOVIE_HASH_NAME,
+            key=slug,
+        )
+
+    def create(self, movie_in: MovieCreate) -> Movie:
         movie = Movie(
-            **movie.model_dump(),
+            **movie_in.model_dump(),
         )
         self.save_movie(movie)
         log.info("Created movie with slug '%s'", movie.slug)
         return movie
+
+    def create_or_raise_if_exists(self, movie_in: MovieCreate) -> Movie:
+        if not self.exists(movie_in.slug):
+            return self.create(movie_in=movie_in)
+
+        raise MovieAlreadyExistsError(movie_in.slug)
 
     def delete_by_slug(self, slug: str) -> None:
         redis_movie.hdel(
