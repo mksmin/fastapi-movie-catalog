@@ -1,27 +1,7 @@
-import secrets
-from abc import ABC, abstractmethod
-
 from redis import Redis
+
+from api.api_v1.auth.services.tokens_helper import TokensHelper
 from core import config
-
-
-class TokensHelper(ABC):
-    @abstractmethod
-    def token_exists(self, token: str) -> bool:
-        pass
-
-    @abstractmethod
-    def add_token(self, token: str) -> None:
-        pass
-
-    @classmethod
-    def generate_token(cls) -> str:
-        return secrets.token_urlsafe(16)
-
-    def generate_and_add_token(self) -> str:
-        token = self.generate_token()
-        self.add_token(token)
-        return token
 
 
 class RedisTokensHelper(TokensHelper):
