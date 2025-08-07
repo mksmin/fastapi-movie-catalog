@@ -22,39 +22,6 @@ redis_movie = Redis(
 
 
 class MovieStorage(BaseModel):
-    slug_to_movie: dict[str, Movie] = {}
-
-    def save_state(self) -> None:
-        USER_DATA_STORAGE_FILEPATH.write_text(
-            self.model_dump_json(indent=4),
-            encoding="utf-8",
-        )
-        log.info("Saved state to storage file")
-
-    @classmethod
-    def from_state(cls) -> "MovieStorage":
-        if not USER_DATA_STORAGE_FILEPATH.exists():
-            log.info("Movie storage file doesn't exist")
-            return MovieStorage()
-        return cls.model_validate_json(
-            USER_DATA_STORAGE_FILEPATH.read_text(
-                encoding="utf-8",
-            )
-        )
-
-    def init_storage_from_state(self):
-        try:
-            data = MovieStorage.from_state()
-        except ValidationError:
-            self.save_state()
-            log.warning("Rewritten storage file due to validation error")
-            return
-
-        self.slug_to_movie.update(
-            data.slug_to_movie,
-        )
-        log.warning("Recovered data from storage file.")
-
     def save_movie(self, movie: Movie) -> None:
         redis_movie.hset(
             name=config.REDIS_MOVIE_HASH_NAME,

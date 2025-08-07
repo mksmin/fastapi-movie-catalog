@@ -53,16 +53,6 @@ def get_movie_by_slug(
     )
 
 
-def storage_save_state(
-    background_tasks: BackgroundTasks,
-    request: Request,
-):
-    yield
-    if request.method in UNSAFE_METHODS:
-        log.info("Saving state in background")
-        background_tasks.add_task(storage.save_state)
-
-
 def validate_api_token(
     api_token: HTTPAuthorizationCredentials | None,
 ):
