@@ -20,7 +20,7 @@ from core.config import (
     USERS_DB,
 )
 from .crud import storage
-from .redis import redis
+from .redis import redis_tokens
 from schemas.movies import Movie
 
 log = logging.getLogger(__name__)
@@ -71,9 +71,8 @@ def validate_api_token(
     api_token: HTTPAuthorizationCredentials | None,
 ):
 
-    if redis.sismember(
-        name=REDIS_API_TOKENS_SET_NAME,
-        value=api_token.credentials,
+    if redis_tokens.token_exists(
+        api_token.credentials,
     ):
         return
 
