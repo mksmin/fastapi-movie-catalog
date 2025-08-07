@@ -3,6 +3,7 @@ from fastapi import (
     status,
     Depends,
 )
+from fastapi.exceptions import HTTPException
 
 from api.api_v1.movies.crud import storage
 from api.api_v1.movies.dependencies import (
@@ -39,8 +40,30 @@ def get_movies() -> list[Movie]:
     return storage.get()
 
 
-@router.post("/", response_model=MovieRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    response_model=MovieRead,
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        status.HTTP_409_CONFLICT: {
+            "description": "Conflict. Movie with this slug already exists.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": "Conflict. Movie with slug='slug' already exists."
+                    }
+                }
+            },
+        },
+    },
+)
 def create_movie(
     movie_create: MovieCreate,
 ) -> Movie:
-    return storage.create(movie_create)
+    if not storage.get_by_slug(movie_create.slug):
+        return storage.create(movie_create)
+
+    raise HTTPException(
+        status_code=status.HTTP_409_CONFLICT,
+        detail=f"Movie with slug={movie_create.slug!r} already exists",
+    )
