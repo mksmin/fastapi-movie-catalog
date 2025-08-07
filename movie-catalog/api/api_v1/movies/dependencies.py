@@ -16,10 +16,11 @@ from fastapi.security import (
 )
 
 from core.config import (
-    API_TOKENS,
+    REDIS_API_TOKENS_SET_NAME,
     USERS_DB,
 )
 from .crud import storage
+from .redis import redis
 from schemas.movies import Movie
 
 log = logging.getLogger(__name__)
@@ -70,7 +71,10 @@ def validate_api_token(
     api_token: HTTPAuthorizationCredentials | None,
 ):
 
-    if api_token.credentials in API_TOKENS:
+    if redis.sismember(
+        name=REDIS_API_TOKENS_SET_NAME,
+        value=api_token.credentials,
+    ):
         return
 
     raise HTTPException(
