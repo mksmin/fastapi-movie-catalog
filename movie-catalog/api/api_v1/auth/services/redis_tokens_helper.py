@@ -37,6 +37,9 @@ class RedisTokensHelper(TokensHelper):
     def get_tokens(self) -> list[str]:
         return list(self.redis.smembers(self.tokens_set_name))
 
+    def delete_token(self, token: str) -> None:
+        self.redis.srem(self.tokens_set_name, token)
+
 
 redis_tokens = RedisTokensHelper(
     host=config.REDIS_HOST,

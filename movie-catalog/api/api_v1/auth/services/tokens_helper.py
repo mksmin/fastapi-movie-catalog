@@ -15,7 +15,7 @@ class TokensHelper(ABC):
     def generate_token(cls) -> str:
         return secrets.token_urlsafe(16)
 
-    def generate_and_add_token(self) -> str:
+    def generate_and_save_token(self) -> str:
         token = self.generate_token()
         self.add_token(token)
         return token
@@ -24,4 +24,12 @@ class TokensHelper(ABC):
     def get_tokens(self) -> list[str]:
         """
         Get all tokens
+        """
+
+    @abstractmethod
+    def delete_token(self, token: str) -> None:
+        """
+        Delete token from storage
+        :param token:
+        :return:
         """
