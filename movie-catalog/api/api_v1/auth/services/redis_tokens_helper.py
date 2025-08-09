@@ -1,3 +1,5 @@
+from typing import Iterable, cast
+
 from redis import Redis
 
 from api.api_v1.auth.services.tokens_helper import TokensHelper
@@ -35,7 +37,12 @@ class RedisTokensHelper(TokensHelper):
         )
 
     def get_tokens(self) -> list[str]:
-        return list(self.redis.smembers(self.tokens_set_name))
+        return list(
+            cast(
+                Iterable[str],
+                self.redis.smembers(self.tokens_set_name),
+            )
+        )
 
     def delete_token(self, token: str) -> None:
         self.redis.srem(self.tokens_set_name, token)

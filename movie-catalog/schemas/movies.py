@@ -30,7 +30,7 @@ class MovieCreate(MovieBase):
     """
 
     title: TitleString
-    description: DescriptionString
+    description: DescriptionString = ""
     slug: Annotated[
         str,
         Len(min_length=3, max_length=50),
@@ -48,7 +48,7 @@ class MovieUpdate(MovieBase):
     rating: RatingInteger
 
 
-class MovieUpdatePartial(MovieBase):
+class MovieUpdatePartial(BaseModel):
     """
     Модель для частичного обновления фильма
     """

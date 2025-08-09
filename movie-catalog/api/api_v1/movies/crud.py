@@ -1,4 +1,6 @@
 import logging
+from typing import Iterable, cast
+
 from pydantic import BaseModel
 from redis import Redis
 
@@ -41,24 +43,33 @@ class MovieStorage(BaseModel):
         log.info("Saved movie to redis storage")
 
     def get(self) -> list[Movie]:
-        if movies := redis_movie.hvals(
-            name=config.REDIS_MOVIE_HASH_NAME,
+        if movies := cast(
+            Iterable[str],
+            redis_movie.hvals(
+                name=config.REDIS_MOVIE_HASH_NAME,
+            ),
         ):
             result = [Movie.model_validate_json(movie) for movie in movies]
             return result
         return []
 
     def get_by_slug(self, slug: str) -> Movie | None:
-        movie = redis_movie.hget(
-            name=config.REDIS_MOVIE_HASH_NAME,
-            key=slug,
+        movie = cast(
+            str,
+            redis_movie.hget(
+                name=config.REDIS_MOVIE_HASH_NAME,
+                key=slug,
+            ),
         )
         return Movie.model_validate_json(movie) if movie else None
 
     def exists(self, slug: str) -> bool:
-        return redis_movie.hexists(
-            name=config.REDIS_MOVIE_HASH_NAME,
-            key=slug,
+        return cast(
+            bool,
+            redis_movie.hexists(
+                name=config.REDIS_MOVIE_HASH_NAME,
+                key=slug,
+            ),
         )
 
     def create(self, movie_in: MovieCreate) -> Movie:
