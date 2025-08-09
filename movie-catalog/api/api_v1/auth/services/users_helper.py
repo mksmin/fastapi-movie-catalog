@@ -21,7 +21,7 @@ class UsersHelper(ABC):
         self,
         username: str,
         password: str,
-    ):
+    ) -> bool:
         db_password = self.get_user_password(username)
         if db_password is None:
             return False

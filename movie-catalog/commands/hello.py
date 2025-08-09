@@ -14,5 +14,5 @@ app = typer.Typer(
 )
 def hello(
     name: Annotated[str, typer.Argument(help="Name of the user.")],
-):
+) -> None:
     print(f"[bold]Hello [green]{name}[/green]![/bold]")

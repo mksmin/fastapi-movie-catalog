@@ -42,7 +42,7 @@ user_basic_auth = HTTPBasic(
 
 def get_movie_by_slug(
     movie_slug: str,
-):
+) -> Movie:
     movie: Movie | None = storage.get_by_slug(slug=movie_slug)
 
     if movie:
@@ -55,7 +55,7 @@ def get_movie_by_slug(
 
 def validate_api_token(
     api_token: HTTPAuthorizationCredentials,
-):
+) -> None:
 
     if redis_tokens.token_exists(
         api_token.credentials,
@@ -90,7 +90,7 @@ def api_token_required_for_unsafe_methods(
 
 def validate_user_credentials(
     credentials: HTTPBasicCredentials | None,
-):
+) -> None:
 
     if credentials and redis_users.validate_user_password(
         username=credentials.username,
@@ -111,7 +111,7 @@ def user_basic_auth_required_for_unsafe_methods(
         HTTPBasicCredentials | None,
         Depends(user_basic_auth),
     ] = None,
-):
+) -> None:
 
     validate_user_credentials(
         credentials=credentials,
@@ -130,7 +130,7 @@ def api_token_or_user_basic_auth_required_for_unsafe_methods(
         HTTPBasicCredentials | None,
         Depends(user_basic_auth),
     ] = None,
-):
+) -> None:
     if request.method not in UNSAFE_METHODS:
         return
 

@@ -9,7 +9,7 @@ redis = Redis(
 )
 
 
-def main():
+def main() -> None:
     print("Redis:", redis.ping())
     redis.set("Name", "Max")
     redis.set("Foo", "Bar")
