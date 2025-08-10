@@ -1,9 +1,11 @@
 import logging
-from typing import Iterable, cast
+from collections.abc import Iterable
+from typing import cast
 
-from core import config
 from pydantic import BaseModel
 from redis import Redis
+
+from core import config
 from schemas.movies import (
     Movie,
     MovieCreate,
@@ -48,8 +50,7 @@ class MovieStorage(BaseModel):
                 name=config.REDIS_MOVIE_HASH_NAME,
             ),
         ):
-            result = [Movie.model_validate_json(movie) for movie in movies]
-            return result
+            return [Movie.model_validate_json(movie) for movie in movies]
         return []
 
     def get_by_slug(self, slug: str) -> Movie | None:
@@ -116,29 +117,3 @@ class MovieStorage(BaseModel):
 
 
 storage = MovieStorage()
-
-
-# storage.create(
-#     MovieCreate(
-#         slug="ring_owner",
-#         title="Властелин Колец",
-#         description="""Храбрый хоббит Фродо Бэггинс женился на дочери короля Саурон.""",
-#         rating=9,
-#     )
-# )
-# storage.create(
-#     MovieCreate(
-#         slug="shawshank_redemption",
-#         title="Побег из Шоушенка",
-#         description="""Джон Трэйси — молодой драматург, который обрел многое от своей мечты в жизни.""",
-#         rating=7,
-#     )
-# )
-# storage.create(
-#     MovieCreate(
-#         slug="spiderman",
-#         title="Человек-паук",
-#         description="""Странный парень в красном костюме мешает жить людям стреляя в них пауками.""",
-#         rating=8,
-#     )
-# )

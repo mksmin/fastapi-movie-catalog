@@ -1,9 +1,10 @@
-from typing import Iterable, cast
+from collections.abc import Iterable
+from typing import cast
 
-from core import config
 from redis import Redis
 
 from api.api_v1.auth.services.tokens_helper import TokensHelper
+from core import config
 
 
 class RedisTokensHelper(TokensHelper):

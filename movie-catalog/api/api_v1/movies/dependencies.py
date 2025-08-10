@@ -13,9 +13,9 @@ from fastapi.security import (
     HTTPBasicCredentials,
     HTTPBearer,
 )
-from schemas.movies import Movie
 
 from api.api_v1.auth.services import redis_tokens, redis_users
+from schemas.movies import Movie
 
 from .crud import storage
 
@@ -69,7 +69,6 @@ def validate_api_token(
 
 
 def api_token_required_for_unsafe_methods(
-    request: Request,
     api_token: Annotated[
         HTTPAuthorizationCredentials | None,
         Depends(
@@ -106,7 +105,6 @@ def validate_user_credentials(
 
 
 def user_basic_auth_required_for_unsafe_methods(
-    request: Request,
     credentials: Annotated[
         HTTPBasicCredentials | None,
         Depends(user_basic_auth),
@@ -132,7 +130,7 @@ def api_token_or_user_basic_auth_required_for_unsafe_methods(
     ] = None,
 ) -> None:
     if request.method not in UNSAFE_METHODS:
-        return
+        return None
 
     if api_token:
         return validate_api_token(api_token=api_token)
