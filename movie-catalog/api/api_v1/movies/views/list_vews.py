@@ -50,9 +50,9 @@ def get_movies() -> list[Movie]:
             "content": {
                 "application/json": {
                     "example": {
-                        "detail": "Conflict. Movie with slug='slug' already exists."
-                    }
-                }
+                        "detail": "Conflict. Movie with slug='slug' already exists.",
+                    },
+                },
             },
         },
     },

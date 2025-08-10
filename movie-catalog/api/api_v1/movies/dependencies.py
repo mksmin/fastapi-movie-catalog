@@ -26,7 +26,7 @@ UNSAFE_METHODS = frozenset(
         "PATCH",
         "PUT",
         "POST",
-    }
+    },
 )
 static_api_token = HTTPBearer(
     scheme_name="Static API Token",
