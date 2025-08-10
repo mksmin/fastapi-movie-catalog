@@ -1,9 +1,8 @@
-import typer
-
 from typing import Annotated
-from rich import print
 
+import typer
 from api.api_v1.auth.services import redis_tokens as tokens
+from rich import print
 
 app = typer.Typer(
     name="token",

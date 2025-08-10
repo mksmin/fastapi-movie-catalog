@@ -2,22 +2,22 @@ import logging
 from typing import Annotated
 
 from fastapi import (
-    HTTPException,
-    status,
-    BackgroundTasks,
-    Request,
     Depends,
+    HTTPException,
+    Request,
+    status,
 )
 from fastapi.security import (
     HTTPAuthorizationCredentials,
-    HTTPBearer,
     HTTPBasic,
     HTTPBasicCredentials,
+    HTTPBearer,
 )
+from schemas.movies import Movie
+
+from api.api_v1.auth.services import redis_tokens, redis_users
 
 from .crud import storage
-from api.api_v1.auth.services import redis_tokens, redis_users
-from schemas.movies import Movie
 
 log = logging.getLogger(__name__)
 UNSAFE_METHODS = frozenset(

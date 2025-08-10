@@ -1,10 +1,9 @@
 import logging
 from typing import Iterable, cast
 
+from core import config
 from pydantic import BaseModel
 from redis import Redis
-
-from core import config
 from schemas.movies import (
     Movie,
     MovieCreate,

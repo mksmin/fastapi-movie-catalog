@@ -1,15 +1,15 @@
 from fastapi import (
     APIRouter,
-    status,
     Depends,
+    status,
 )
 from fastapi.exceptions import HTTPException
+from schemas.movies import Movie, MovieCreate, MovieRead
 
-from api.api_v1.movies.crud import storage, MovieAlreadyExistsError
+from api.api_v1.movies.crud import MovieAlreadyExistsError, storage
 from api.api_v1.movies.dependencies import (
     api_token_or_user_basic_auth_required_for_unsafe_methods,
 )
-from schemas.movies import Movie, MovieCreate, MovieRead
 
 router = APIRouter(
     prefix="/movies",

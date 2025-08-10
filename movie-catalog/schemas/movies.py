@@ -1,6 +1,6 @@
-from annotated_types import Le, Ge, Len, MaxLen
 from typing import Annotated
 
+from annotated_types import Ge, Le, Len, MaxLen
 from pydantic import BaseModel
 
 TitleString = Annotated[

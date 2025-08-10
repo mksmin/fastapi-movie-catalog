@@ -1,18 +1,19 @@
+from typing import Annotated
+
 from fastapi import (
     APIRouter,
     Depends,
     status,
 )
-from typing import Annotated
+from schemas.movies import (
+    Movie,
+    MovieRead,
+    MovieUpdate,
+    MovieUpdatePartial,
+)
 
 from api.api_v1.movies.crud import storage
 from api.api_v1.movies.dependencies import get_movie_by_slug
-from schemas.movies import (
-    Movie,
-    MovieUpdate,
-    MovieUpdatePartial,
-    MovieRead,
-)
 
 router = APIRouter(
     prefix="/{movie_slug}",
