@@ -1,48 +1,64 @@
+from typing import Any
+
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
 from unittest import TestCase
 
 
 class MovieCreateTestCase(TestCase):
     def test_movie_can_be_created_from_create_schema(self) -> None:
-        movie_in = MovieCreate(
-            title="Test Movie",
-            description="Test Description",
-            rating=1,
-            slug="test-movie",
-        )
+        data_create: dict[str, dict[str, Any]] = {
+            "case1": {
+                "title": "Test Movie",
+                "description": "Test Description",
+                "slug": "test-movie",
+                "rating": 1,
+            },
+            "case2": {
+                "title": "1",
+                "description": "",
+                "slug": "123",
+                "rating": 10,
+            },
+            "case3": {
+                "title": "Очень длинное название, про хоббита который нашел кольцо и живет на опушке леса",
+                "description": "Очень длинное описание, про хоббита который нашел кольцо и живет на опушке леса",
+                "slug": "test-movie-about-hobbit",
+                "rating": "5",
+            },
+        }
 
-        movie = Movie(
-            **movie_in.model_dump(),
-        )
-        self.assertEqual(
-            movie_in.description,
-            movie.description,
-        )
-        self.assertEqual(
-            movie_in.title,
-            movie.title,
-        )
-        self.assertEqual(
-            movie_in.rating,
-            movie.rating,
-        )
-        self.assertEqual(
-            movie_in.slug,
-            movie.slug,
-        )
+        for case, data in data_create.items():
+            with self.subTest(case=case, msg=f"test-create-{case}"):
+                movie_in = MovieCreate(
+                    **data,
+                )
+                movie = Movie(**movie_in.model_dump())
+                self.assertEqual(
+                    movie_in.description,
+                    movie.description,
+                )
+
+                self.assertEqual(
+                    movie_in.title,
+                    movie.title,
+                )
+                self.assertEqual(
+                    movie_in.rating,
+                    movie.rating,
+                )
+                self.assertEqual(
+                    movie_in.slug,
+                    movie.slug,
+                )
 
 
 class MovieUpdateTestCase(TestCase):
     def test_movie_can_be_updated_from_update_schema(self) -> None:
-        movie_in = MovieCreate(
+        movie = Movie(
             title="Test Movie",
             description="Test Description",
             rating=1,
             slug="test-movie",
-        )
-
-        movie = Movie(
-            **movie_in.model_dump(),
         )
 
         movie_update = MovieUpdate(
@@ -69,45 +85,27 @@ class MovieUpdateTestCase(TestCase):
 
 class MoviePartialUpdateTestCase(TestCase):
     def test_movie_can_be_updated_from_partial_update_schema(self) -> None:
-        movie_in = MovieCreate(
+        movie = Movie(
             title="Test Movie",
             description="Test Description",
             rating=1,
             slug="test-movie",
         )
-        movie = Movie(
-            **movie_in.model_dump(),
-        )
 
-        movie_update = MovieUpdatePartial(
-            title="Updated Movie",
-        )
-        for field, value in movie_update.model_dump(exclude_unset=True).items():
-            setattr(movie, field, value)
+        titles_for_partial_update = [
+            " ",
+            "Updated Movie",
+            None,
+            "Очень длинное название, про хоббита который нашел кольцо и живет на опушке леса",
+        ]
 
-        self.assertEqual(
-            movie_update.title,
-            movie.title,
-        )
+        for title in titles_for_partial_update:
+            with self.subTest(title=title, msg=f"test-partial-update-{title}"):
+                movie_update = MovieUpdatePartial(title=title)
+                for field, value in movie_update.model_dump(exclude_unset=True).items():
+                    setattr(movie, field, value)
 
-        movie_update = MovieUpdatePartial(
-            description="",
-        )
-        for field, value in movie_update.model_dump(exclude_unset=True).items():
-            setattr(movie, field, value)
-
-        self.assertEqual(
-            movie_update.description,
-            movie.description,
-        )
-
-        movie_update = MovieUpdatePartial(
-            rating=3,
-        )
-        for field, value in movie_update.model_dump(exclude_unset=True).items():
-            setattr(movie, field, value)
-
-        self.assertEqual(
-            movie_update.rating,
-            movie.rating,
-        )
+                self.assertEqual(
+                    title,
+                    movie.title,
+                )
