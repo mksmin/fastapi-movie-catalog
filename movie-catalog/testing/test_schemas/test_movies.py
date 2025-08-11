@@ -1,4 +1,4 @@
-from schemas.movies import Movie, MovieCreate
+from schemas.movies import Movie, MovieCreate, MovieUpdate
 from unittest import TestCase
 
 
@@ -29,4 +29,39 @@ class MovieCreateTestCase(TestCase):
         self.assertEqual(
             movie_in.slug,
             movie.slug,
+        )
+
+
+class MovieUpdateTestCase(TestCase):
+    def test_movie_can_be_updated_from_update_schema(self) -> None:
+        movie_in = MovieCreate(
+            title="Test Movie",
+            description="Test Description",
+            rating=1,
+            slug="test-movie",
+        )
+
+        movie = Movie(
+            **movie_in.model_dump(),
+        )
+
+        movie_update = MovieUpdate(
+            title="Updated Movie",
+            description="Updated Description",
+            rating=2,
+        )
+        for field, value in movie_update.model_dump().items():
+            setattr(movie, field, value)
+
+        self.assertEqual(
+            movie_update.title,
+            movie.title,
+        )
+        self.assertEqual(
+            movie_update.description,
+            movie.description,
+        )
+        self.assertEqual(
+            movie_update.rating,
+            movie.rating,
         )
