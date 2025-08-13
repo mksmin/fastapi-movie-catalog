@@ -63,7 +63,7 @@ def create_movie(
     try:
         return storage.create_or_raise_if_exists(movie_create)
     except MovieAlreadyExistsError:
-        raise HTTPException(
+        raise HTTPException(  # noqa: B904
             status_code=status.HTTP_409_CONFLICT,
             detail=f"Movie with slug={movie_create.slug!r} already exists",
         )
