@@ -1,13 +1,14 @@
+from os import getenv
 from typing import Any
+from unittest import TestCase
 
 from pydantic import ValidationError
 
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
-from unittest import TestCase
-from os import getenv
 
 if getenv("TESTING") != "1":
-    raise EnvironmentError("Environment is not ready for testing")
+    msg = "Environment is not ready for testing"
+    raise EnvironmentError(msg)  # noqa: UP024
 
 
 class MovieCreateTestCase(TestCase):
@@ -26,8 +27,10 @@ class MovieCreateTestCase(TestCase):
                 "rating": 10,
             },
             "case3": {
-                "title": "Очень длинное название, про хоббита который нашел кольцо и живет на опушке леса",
-                "description": "Очень длинное описание, про хоббита который нашел кольцо и живет на опушке леса",
+                "title": "Очень длинное название, про хоббита который нашел кольцо "
+                "и живет на опушке леса",
+                "description": "Очень длинное описание, про хоббита "
+                "который нашел кольцо и живет на опушке леса",
                 "slug": "test-movie-about-hobbit",
                 "rating": "5",
             },
@@ -133,7 +136,8 @@ class MoviePartialUpdateTestCase(TestCase):
             " ",
             "Updated Movie",
             None,
-            "Очень длинное название, про хоббита который нашел кольцо и живет на опушке леса",
+            "Очень длинное название, про хоббита который нашел кольцо "
+            "и живет на опушке леса",
         ]
 
         for title in titles_for_partial_update:
