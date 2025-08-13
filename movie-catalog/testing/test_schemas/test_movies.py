@@ -1,9 +1,13 @@
 from typing import Any
 
-from pydantic_core._pydantic_core import ValidationError
+from pydantic import ValidationError
 
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
 from unittest import TestCase
+from os import getenv
+
+if getenv("TESTING") != "1":
+    raise EnvironmentError("Environment is not ready for testing")
 
 
 class MovieCreateTestCase(TestCase):
