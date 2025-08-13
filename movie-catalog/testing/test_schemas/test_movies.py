@@ -1,5 +1,7 @@
 from typing import Any
 
+from pydantic_core._pydantic_core import ValidationError
+
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
 from unittest import TestCase
 
@@ -50,6 +52,37 @@ class MovieCreateTestCase(TestCase):
                     movie_in.slug,
                     movie.slug,
                 )
+
+    def test_movie_slug_to_short(self) -> None:
+        with self.assertRaises(
+            ValidationError,
+        ) as exc_info:
+
+            MovieCreate(
+                slug="te",
+                title="Test Movie",
+                description="Test Description",
+                rating=1,
+            )
+            error_details = exc_info.exception.errors()[0]
+            expected_type = "string_too_short"
+            self.assertEqual(
+                expected_type,
+                error_details["type"],
+            )
+
+    def test_movie_slug_to_short_with_regex(self) -> None:
+        with self.assertRaisesRegex(
+            ValidationError,
+            expected_regex="String should have at least 3 characters",
+        ):
+
+            MovieCreate(
+                slug="te",
+                title="Test Movie",
+                description="Test Description",
+                rating=1,
+            )
 
 
 class MovieUpdateTestCase(TestCase):
