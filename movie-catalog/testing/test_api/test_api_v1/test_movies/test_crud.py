@@ -4,12 +4,14 @@ from os import getenv
 from typing import ClassVar
 from unittest import TestCase
 
+import pytest
+
 from api.api_v1.movies.crud import storage
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
 
 if getenv("TESTING") != "1":
     msg = "Environment is not ready for testing"
-    raise OSError(msg)
+    pytest.exit(msg)
 
 
 def create_movie() -> Movie:
