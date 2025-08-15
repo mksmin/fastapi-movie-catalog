@@ -1,15 +1,9 @@
-from os import getenv
 from typing import Any
 from unittest import TestCase
 
-import pytest
 from pydantic import ValidationError
 
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
-
-if getenv("TESTING") != "1":
-    msg = "Environment is not ready for testing"
-    pytest.exit(msg)
 
 
 class MovieCreateTestCase(TestCase):
