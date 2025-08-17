@@ -3,7 +3,9 @@ import string
 from typing import ClassVar
 from unittest import TestCase
 
-from api.api_v1.movies.crud import storage
+import pytest
+
+from api.api_v1.movies.crud import MovieAlreadyExistsError, storage
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
 
 
@@ -99,3 +101,17 @@ class MovieStorageGetMoviesTestCase(TestCase):
                     movie,
                     db_movie,
                 )
+
+
+def test_create_or_raise_if_exists() -> None:
+    existing_movie = create_movie()
+    movie_in = MovieCreate(**existing_movie.model_dump())
+    with pytest.raises(
+        MovieAlreadyExistsError,
+        match=existing_movie.slug,
+    ) as exc_info:
+        storage.create_or_raise_if_exists(
+            movie_in=movie_in,
+        )
+
+    assert exc_info.value.args[0] == existing_movie.slug
