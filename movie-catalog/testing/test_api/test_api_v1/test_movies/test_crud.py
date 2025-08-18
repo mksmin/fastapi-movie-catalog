@@ -19,6 +19,11 @@ def create_movie() -> Movie:
     return storage.create(movie_in)
 
 
+@pytest.fixture()
+def movie() -> Movie:
+    return create_movie()
+
+
 class MovieStorageUpdateTestCase(TestCase):
     def setUp(self) -> None:
         self.movie = create_movie()
@@ -103,15 +108,14 @@ class MovieStorageGetMoviesTestCase(TestCase):
                 )
 
 
-def test_create_or_raise_if_exists() -> None:
-    existing_movie = create_movie()
-    movie_in = MovieCreate(**existing_movie.model_dump())
+def test_create_or_raise_if_exists(movie: Movie) -> None:
+    movie_in = MovieCreate(**movie.model_dump())
     with pytest.raises(
         MovieAlreadyExistsError,
-        match=existing_movie.slug,
+        match=movie_in.slug,
     ) as exc_info:
         storage.create_or_raise_if_exists(
             movie_in=movie_in,
         )
 
-    assert exc_info.value.args[0] == existing_movie.slug
+    assert exc_info.value.args[0] == movie_in.slug
