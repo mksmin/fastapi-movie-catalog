@@ -1,5 +1,3 @@
-import random
-import string
 from typing import ClassVar
 from unittest import TestCase
 
@@ -7,16 +5,7 @@ import pytest
 
 from api.api_v1.movies.crud import MovieAlreadyExistsError, storage
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
-
-
-def create_movie() -> Movie:
-    movie_in = MovieCreate(
-        slug="".join(random.choices(string.ascii_letters, k=10)),
-        title="Test Movie",
-        description="Test Description",
-        rating=random.randint(1, 10),
-    )
-    return storage.create(movie_in)
+from testing.conftest import create_movie
 
 
 class MovieStorageUpdateTestCase(TestCase):
