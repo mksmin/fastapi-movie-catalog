@@ -5,12 +5,12 @@ import pytest
 
 from api.api_v1.movies.crud import MovieAlreadyExistsError, storage
 from schemas.movies import Movie, MovieCreate, MovieUpdate, MovieUpdatePartial
-from testing.conftest import create_movie
+from testing.conftest import create_movie_random_slug
 
 
 class MovieStorageUpdateTestCase(TestCase):
     def setUp(self) -> None:
-        self.movie = create_movie()
+        self.movie = create_movie_random_slug()
 
     def tearDown(self) -> None:
         storage.delete(self.movie)
@@ -59,7 +59,7 @@ class MovieStorageGetMoviesTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.movies = [create_movie() for _ in range(cls.MOVIES_COUNT)]
+        cls.movies = [create_movie_random_slug() for _ in range(cls.MOVIES_COUNT)]
 
     @classmethod
     def tearDownClass(cls) -> None:
