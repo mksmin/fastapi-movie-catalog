@@ -4,10 +4,11 @@ from annotated_types import Ge, Le, Len, MaxLen
 from pydantic import BaseModel
 
 DESCRIPTION_MAX_LENGTH = 200
+TITLE_MAX_LENGTH = 100
 
 TitleString = Annotated[
     str,
-    Len(min_length=1, max_length=100),
+    Len(min_length=1, max_length=TITLE_MAX_LENGTH),
 ]
 DescriptionString = Annotated[
     str,

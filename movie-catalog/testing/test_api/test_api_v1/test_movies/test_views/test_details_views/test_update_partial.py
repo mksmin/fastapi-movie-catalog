@@ -2,8 +2,8 @@ from collections.abc import Generator
 
 import pytest
 from _pytest.fixtures import SubRequest
+from fastapi import status
 from fastapi.testclient import TestClient
-from starlette import status
 
 from api.api_v1.movies.crud import storage
 from main import app
