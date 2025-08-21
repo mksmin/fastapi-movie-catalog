@@ -8,14 +8,15 @@ from starlette import status
 from api.api_v1.movies.crud import storage
 from main import app
 from schemas.movies import DESCRIPTION_MAX_LENGTH, Movie
-from testing.conftest import create_movie
+from testing.conftest import create_movie_random_slug
 
 
 class TestUpdatePartial:
     @pytest.fixture()
     def movie(self, request: SubRequest) -> Generator[Movie, None, None]:
-        slug, description = request.param
-        movie = create_movie(slug=slug, description=description)
+        movie = create_movie_random_slug(
+            description=request.param,
+        )
         yield movie
         storage.delete(movie)
 
@@ -23,22 +24,22 @@ class TestUpdatePartial:
         "movie, new_description",
         [
             pytest.param(
-                ("foo", "some description"),
+                "some description",
                 "",
                 id="some-description-to-no-description",
             ),
             pytest.param(
-                ("bar", ""),
+                "",
                 "some description",
                 id="no-description-to-some-description",
             ),
             pytest.param(
-                ("min-to-max", ""),
+                "",
                 "a" * DESCRIPTION_MAX_LENGTH,
                 id="min-description-to-max-description",
             ),
             pytest.param(
-                ("max-to-min", "a" * DESCRIPTION_MAX_LENGTH),
+                "a" * DESCRIPTION_MAX_LENGTH,
                 "",
                 id="min-description-to-max-description",
             ),
