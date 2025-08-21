@@ -13,16 +13,21 @@ if getenv("TESTING") != "1":
     pytest.exit(msg)
 
 
-def build_movie_create(slug: str) -> MovieCreate:
+def build_movie_create(
+    slug: str,
+    description: str = "Test Movie Description",
+) -> MovieCreate:
     return MovieCreate(
         title="Test Movie",
-        description="Test Description",
+        description=description,
         rating=5,
         slug=slug,
     )
 
 
-def build_movie_create_random_slug() -> MovieCreate:
+def build_movie_create_random_slug(
+    description: str = "Test Movie Description",
+) -> MovieCreate:
     return build_movie_create(
         slug="".join(
             random.choices(  # noqa: S311
@@ -30,16 +35,25 @@ def build_movie_create_random_slug() -> MovieCreate:
                 k=10,
             ),
         ),
+        description=description,
     )
 
 
-def create_movie(slug: str) -> Movie:
-    movie_in = build_movie_create(slug)
+def create_movie(
+    slug: str,
+    description: str = "Test Movie Description",
+) -> Movie:
+    movie_in = build_movie_create(
+        slug=slug,
+        description=description,
+    )
     return storage.create(movie_in)
 
 
-def create_movie_random_slug() -> Movie:
-    movie_in = build_movie_create_random_slug
+def create_movie_random_slug(
+    description: str = "Test Movie Description",
+) -> Movie:
+    movie_in = build_movie_create_random_slug(description=description)
     return storage.create(movie_in)
 
 

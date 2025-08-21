@@ -3,13 +3,15 @@ from typing import Annotated
 from annotated_types import Ge, Le, Len, MaxLen
 from pydantic import BaseModel
 
+DESCRIPTION_MAX_LENGTH = 200
+
 TitleString = Annotated[
     str,
     Len(min_length=1, max_length=100),
 ]
 DescriptionString = Annotated[
     str,
-    MaxLen(200),
+    MaxLen(DESCRIPTION_MAX_LENGTH),
 ]
 RatingInteger = Annotated[
     int,
