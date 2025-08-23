@@ -11,6 +11,7 @@ from schemas.movies import DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH, Movie, Movi
 from testing.conftest import create_movie_random_slug
 
 
+@pytest.mark.apitest
 class TestUpdate:
     @pytest.fixture()
     def movie(self, request: SubRequest) -> Generator[Movie, None, None]:
