@@ -1,0 +1,18 @@
+name: Python checks 🐍
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "movie-catalog/**"
+
+jobs:
+  linters:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder GH Actions step
+        run: echo "Hello Actions! Status ${{ github.status }}"
