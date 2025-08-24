@@ -15,4 +15,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Placeholder GH Actions step
-        run: echo "Hello Actions! Status ${{ github.status }}"
+        run: echo "Hello Actions! Job status - ${{ job.status }}"
