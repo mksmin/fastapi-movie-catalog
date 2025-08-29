@@ -72,7 +72,7 @@ class MovieStorage(BaseModel):
             ),
         )
 
-    def create(self, movie_in: MovieCreate):
+    def create(self, movie_in: MovieCreate) -> Movie:
         movie = Movie(
             **movie_in.model_dump(),
         )
