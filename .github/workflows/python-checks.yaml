@@ -47,4 +47,4 @@ jobs:
           run: uv sync --locked --all-extras --dev
 
         - name: Run mypy
-          run: uv run mypy movie_catalog
+          run: uv run mypy movie-catalog
