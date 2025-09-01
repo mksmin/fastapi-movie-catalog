@@ -37,7 +37,7 @@ def build_movie_create_random_slug(
 ) -> MovieCreate:
     return build_movie_create(
         slug="".join(
-            random.choices(  # noqa: S311
+            random.choices(
                 string.ascii_letters,
                 k=10,
             ),
