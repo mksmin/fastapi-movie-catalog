@@ -33,7 +33,7 @@ def build_movie_create(
 def build_movie_create_random_slug(
     title: str = "Test Movie",
     description: str = "Test Movie Description",
-    rating: int = 5
+    rating: int = 5,
 ) -> MovieCreate:
     return build_movie_create(
         slug="".join(
