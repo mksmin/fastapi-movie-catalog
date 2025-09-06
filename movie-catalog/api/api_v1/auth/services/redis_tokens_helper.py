@@ -4,7 +4,7 @@ from typing import cast
 from redis import Redis
 
 from api.api_v1.auth.services.tokens_helper import TokensHelper
-from core import config
+from core.config import settings
 
 
 class RedisTokensHelper(TokensHelper):
@@ -50,8 +50,8 @@ class RedisTokensHelper(TokensHelper):
 
 
 redis_tokens = RedisTokensHelper(
-    host=config.REDIS_HOST,
-    port=config.REDIS_PORT,
-    db=config.REDIS_TOKENS_DB,
-    tokens_set_name=config.REDIS_API_TOKENS_SET_NAME,
+    host=settings.redis.connection.host,
+    port=settings.redis.connection.port,
+    db=settings.redis.db.tokens,
+    tokens_set_name=settings.redis.collections_names.tokens_set,
 )
