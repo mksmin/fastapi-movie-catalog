@@ -19,7 +19,7 @@ dev = [
     "pre-commit>=4.3.0",
     "pytest>=8.4.1",
     "pytest-cov>=6.2.1",
-    "ruff>=0.12.8",
+    "ruff~=0.12.8",
 ]
 
 # uv settings
@@ -49,7 +49,7 @@ plugins = [
 
 # ruff settings
 [tool.ruff]
-required-version = ">=0.12.8"
+required-version = "~=0.12.8"
 src = [
     "movie-catalog",
 ]
