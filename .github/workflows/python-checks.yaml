@@ -81,10 +81,16 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run python tests
-        run: uv run pytest movie-catalog --cov=movie-catalog --cov-report=xml:coverage.xml
+        run: uv run pytest movie-catalog --cov=movie-catalog --cov-report=xml:coverage.xml --cov-report=json:coverage.json
         env:
           TESTING: 1
           REDIS_PORT: 6379
+
+      - name: Prepare coverage percentage
+        run: |
+          export EXTRACTED_COVERAGE=$(python -c 'import json;print(json.load(open("coverage.json"))["totals"]["percent_covered_display"])')
+          echo "TOTAL_COVERAGE=$EXTRACTED_COVERAGE" >> $GITHUB_ENV
+          echo "### Tests coverage: ${TOTAL_COVERAGE}%" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v5
@@ -93,3 +99,15 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
           fail_ci_if_error: 'true'
+
+      - name: Update coverage badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 444de6018dca3ec0f1f84e9fe5208f5f
+          filename: coverage.json
+          label: Coverage
+          message: ${{ env.TOTAL_COVERAGE }}%
+          valColorRange: ${{ env.TOTAL_COVERAGE }}
+          minColorRange: 70
+          maxColorRange: 90

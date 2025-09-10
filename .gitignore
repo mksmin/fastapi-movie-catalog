@@ -2,6 +2,7 @@ fastapi-movie-catalog.iml
 data_storage
 .gigaide
 .secrets
+coverage.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
