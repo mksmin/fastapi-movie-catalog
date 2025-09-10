@@ -69,7 +69,7 @@ class MovieStorageGetMoviesTestCase(TestCase):
     def test_get_list(self) -> None:
         movies_list = storage.get()
         expected_slugs = {movie.slug for movie in self.movies}
-        received_slugs = {movie.slug for movie in movies_list}
+        received_slugs = {mv_storage.slug for mv_storage in movies_list}
 
         expected_diff = set[str]()
         diff = expected_slugs - received_slugs
