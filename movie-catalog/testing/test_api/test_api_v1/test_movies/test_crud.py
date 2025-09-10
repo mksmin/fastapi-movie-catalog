@@ -115,5 +115,4 @@ def test_create_twice() -> None:
         match=movie_create.slug,
     ) as exc_info:
         storage.create_or_raise_if_exists(movie_create)
-        # special broke case
-        assert exc_info.value.args == (movie_create.slug,)
+    assert exc_info.value.args == (movie_create.slug,)
