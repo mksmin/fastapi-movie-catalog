@@ -52,7 +52,8 @@ jobs:
         run: uv run mypy movie-catalog
 
   run-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    container: python:3.13.7-slim-bookworm
     needs:
       - run-checks
     services:
@@ -63,8 +64,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 6379:6379
     steps:
       - uses: actions/checkout@v4
 
@@ -84,7 +83,8 @@ jobs:
         run: uv run pytest movie-catalog --cov=movie-catalog --cov-report=xml:coverage.xml --cov-report=json:coverage.json
         env:
           TESTING: 1
-          REDIS_PORT: 6379
+          APP_CONFIG__REDIS__CONNECTION__HOST: redis
+          APP_CONFIG__REDIS__CONNECTION__PORT: 6379
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
