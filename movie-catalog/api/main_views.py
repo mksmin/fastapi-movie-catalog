@@ -1,5 +1,3 @@
-from datetime import date
-
 from fastapi import (
     APIRouter,
     Request,
@@ -19,13 +17,11 @@ def read_root(
     request: Request,
 ) -> HTMLResponse:
     context = {}
-    today = date.today()
     features = [
         "Показ рейтинга фильмов",
         "Подробная информация о фильме",
     ]
     context.update(
-        today=today,
         features=features,
     )
 
