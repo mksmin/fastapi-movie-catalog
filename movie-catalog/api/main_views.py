@@ -1,13 +1,36 @@
+from datetime import date
+
 from fastapi import (
     APIRouter,
+    Request,
 )
 from fastapi.responses import HTMLResponse
 
-from core.config import BASE_DIR
+from templating import templates
 
 router = APIRouter()
 
 
-@router.get("/", response_class=HTMLResponse)
-def read_root() -> str:
-    return (BASE_DIR / "pages" / "home.html").read_text()
+@router.get(
+    "/",
+    include_in_schema=False,
+)
+def read_root(
+    request: Request,
+) -> HTMLResponse:
+    context = {}
+    today = date.today()
+    features = [
+        "Показ рейтинга фильмов",
+        "Подробная информация о фильме",
+    ]
+    context.update(
+        today=today,
+        features=features,
+    )
+
+    return templates.TemplateResponse(
+        request=request,
+        name="home.html",
+        context=context,
+    )
