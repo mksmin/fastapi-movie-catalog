@@ -1,6 +1,11 @@
+{% set navigation = [
+("home", "Home"),
+("about", "About"),
+] %}
+
 <nav class="navbar navbar-expand bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Movies</a>
+    <a class="navbar-brand" href="/">Shortener</a>
     <button
         class="navbar-toggler"
         type="button"
@@ -14,20 +19,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
+        {% for name, title in navigation %}
+        {% set url = url_for(name) %}
+
         <li class="nav-item">
           <a
+              {% if url.path == request.url.path %}
               class="nav-link active"
               aria-current="page"
-              href="/"
-          >Home</a>
+              {% else %}
+              class="nav-link"
+              {% endif %}}
+              href="{{ url }}"
+          >{{ title }}</a>
         </li>
-        <li class="nav-item">
-          <a
-              class="nav-link active"
-              aria-current="page"
-              href="/about""
-          >About</a>
-        </li>
+        {% endfor %}
+
       </ul>
     </div>
   </div>
