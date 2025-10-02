@@ -1,15 +1,17 @@
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import (
+    Depends,
+    Request,
+)
 
-from core.config import settings
 from storage.movies import MovieStorage
 
 
-def get_movies_storage() -> MovieStorage:
-    return MovieStorage(
-        hash_name=settings.redis.collections_names.movie_hash,
-    )
+def get_movies_storage(
+    request: Request,
+) -> MovieStorage:
+    return request.app.state.movies_storage  # type: ignore[no-any-return]
 
 
 GetMoviesStorage = Annotated[
