@@ -15,8 +15,8 @@ from fastapi.security import (
 )
 
 from api.api_v1.auth.services import redis_tokens, redis_users
+from dependencies.movies import GetMoviesStorage
 from schemas.movies import Movie
-from storage.movies.crud import storage
 
 log = logging.getLogger(__name__)
 UNSAFE_METHODS = frozenset(
@@ -41,6 +41,7 @@ user_basic_auth = HTTPBasic(
 
 def get_movie_by_slug(
     movie_slug: str,
+    storage: GetMoviesStorage,
 ) -> Movie:
     movie: Movie | None = storage.get_by_slug(slug=movie_slug)
 
