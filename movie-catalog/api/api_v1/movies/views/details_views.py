@@ -6,7 +6,6 @@ from fastapi import (
     status,
 )
 
-from api.api_v1.movies.crud import storage
 from api.api_v1.movies.dependencies import get_movie_by_slug
 from schemas.movies import (
     Movie,
@@ -14,6 +13,7 @@ from schemas.movies import (
     MovieUpdate,
     MovieUpdatePartial,
 )
+from storage.movies.crud import storage
 
 router = APIRouter(
     prefix="/{movie_slug}",

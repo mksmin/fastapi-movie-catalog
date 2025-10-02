@@ -1,3 +1,9 @@
+__all__ = (
+    "MovieStorage",
+    "storage",
+)
+
+
 import logging
 from collections.abc import Iterable
 from typing import cast
@@ -12,6 +18,7 @@ from schemas.movies import (
     MovieUpdate,
     MovieUpdatePartial,
 )
+from storage.movies.exceptions import MovieAlreadyExistsError
 
 log = logging.getLogger(__name__)
 redis_movie = Redis(
@@ -20,18 +27,6 @@ redis_movie = Redis(
     db=settings.redis.db.movie,
     decode_responses=True,
 )
-
-
-class MovieBaseError(Exception):
-    """
-    Base exception for movie CRUD actions
-    """
-
-
-class MovieAlreadyExistsError(MovieBaseError):
-    """
-    Raised on movie creation if such slug already exists
-    """
 
 
 class MovieStorage(BaseModel):

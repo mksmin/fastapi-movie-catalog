@@ -16,8 +16,7 @@ from fastapi.security import (
 
 from api.api_v1.auth.services import redis_tokens, redis_users
 from schemas.movies import Movie
-
-from .crud import storage
+from storage.movies.crud import storage
 
 log = logging.getLogger(__name__)
 UNSAFE_METHODS = frozenset(
