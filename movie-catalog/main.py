@@ -6,9 +6,9 @@ from fastapi import (
 )
 
 from api import router as api_router
-from api.main_views import router as main_views_router
 from app_lifespan import lifespan
 from core.config import settings
+from rest import router as rest_router
 
 logging.basicConfig(
     level=settings.logging.log_level,
@@ -21,7 +21,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.include_router(api_router)
-app.include_router(main_views_router)
+app.include_router(rest_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
