@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter
 from starlette.requests import Request
 from starlette.responses import HTMLResponse
@@ -15,7 +17,13 @@ router = APIRouter()
 def list_views(
     request: Request,
 ) -> HTMLResponse:
+    context: dict[str, Any] = {}
+    movies = []
+    context.update(
+        movies=movies,
+    )
     return templates.TemplateResponse(
         request=request,
         name="movies/list.html",
+        context=context,
     )

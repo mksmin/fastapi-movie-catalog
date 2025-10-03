@@ -6,4 +6,9 @@ All Movies
 
 {% block main %}
 <h1> Movies list</h1>
+{% if movies %}
+{{ movies }}
+{% else %}
+<h2>No Movies yet</h2>
+{% endif %}
 {% endblock %}
