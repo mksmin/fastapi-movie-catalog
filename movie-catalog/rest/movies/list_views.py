@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
+from dependencies.movies import GetMoviesStorage
 from templating import templates
 
 router = APIRouter()
@@ -16,9 +17,10 @@ router = APIRouter()
 )
 def list_views(
     request: Request,
+    storage: GetMoviesStorage,
 ) -> HTMLResponse:
     context: dict[str, Any] = {}
-    movies = []
+    movies = storage.get()
     context.update(
         movies=movies,
     )
