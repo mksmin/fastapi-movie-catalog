@@ -229,6 +229,7 @@ dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "jinja2" },
     { name = "pydantic-settings", extra = ["yaml"] },
+    { name = "python-multipart" },
     { name = "redis", extra = ["hiredis"] },
     { name = "typer" },
 ]
@@ -249,6 +250,7 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.116.1" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "pydantic-settings", extras = ["yaml"], specifier = ">=2.10.1" },
+    { name = "python-multipart", specifier = ">=0.0.20" },
     { name = "redis", extras = ["hiredis"], specifier = ">=6.4.0" },
     { name = "typer", specifier = ">=0.16.0" },
 ]
