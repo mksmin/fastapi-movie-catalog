@@ -1,8 +1,14 @@
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Form
+from fastapi import (
+    APIRouter,
+    Form,
+    Request,
+)
+from fastapi.responses import HTMLResponse
 
 from schemas.movies import MovieCreate
+from templating import templates
 
 router = APIRouter(
     prefix="/create",
@@ -11,13 +17,27 @@ router = APIRouter(
 
 @router.get(
     "/",
-    name="",
+    name="movies:create-view",
 )
-def get_page_create_movie() -> None:
-    pass
+def get_page_create_movie(
+    request: Request,
+) -> HTMLResponse:
+    context: dict[str, Any] = {}
+    model_schema = MovieCreate.model_json_schema()
+    context.update(
+        model_schema=model_schema,
+    )
+    return templates.TemplateResponse(
+        request=request,
+        name="movies/create.html",
+        context=context,
+    )
 
 
-@router.post("/", name="")
+@router.post(
+    "/",
+    name="movies:create",
+)
 def create_movie(
     movie_create: Annotated[
         MovieCreate,
