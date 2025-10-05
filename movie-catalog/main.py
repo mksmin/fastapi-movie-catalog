@@ -20,8 +20,8 @@ app = FastAPI(
     title="Movie Catalog",
     lifespan=lifespan,
 )
-app.include_router(api_router)
 app.include_router(rest_router)
+app.include_router(api_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
