@@ -4,9 +4,14 @@ from fastapi import (
     APIRouter,
     Form,
     Request,
+    status,
 )
-from fastapi.responses import HTMLResponse
+from fastapi.responses import (
+    HTMLResponse,
+    RedirectResponse,
+)
 
+from dependencies.movies import GetMoviesStorage
 from schemas.movies import MovieCreate
 from templating import templates
 
@@ -39,9 +44,17 @@ def get_page_create_movie(
     name="movies:create",
 )
 def create_movie(
+    request: Request,
     movie_create: Annotated[
         MovieCreate,
         Form(),
     ],
-) -> dict[str, Any]:
-    return movie_create.model_dump(mode="json")
+    storage: GetMoviesStorage,
+) -> RedirectResponse:
+    storage.create_or_raise_if_exists(
+        movie_create,
+    )
+    return RedirectResponse(
+        url=request.url_for("movies:list"),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
