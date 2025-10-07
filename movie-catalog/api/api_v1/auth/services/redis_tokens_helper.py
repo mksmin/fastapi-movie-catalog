@@ -15,6 +15,10 @@ class RedisTokensHelper(TokensHelper):
         db: int,
         tokens_set_name: str,
     ) -> None:
+        print(  # noqa: T201,
+            f"[DEBUG] RedisTokensHelper initialized with host={host}, port={port}, db={db}",  # noqa: T201, E501, RUF100
+        )
+
         self.redis = Redis(
             host=host,
             port=port,
@@ -55,3 +59,4 @@ redis_tokens = RedisTokensHelper(
     db=settings.redis.db.tokens,
     tokens_set_name=settings.redis.collections_names.tokens_set,
 )
+print("Redis tokens helper loaded", settings.redis.connection.host)  # noqa: T201

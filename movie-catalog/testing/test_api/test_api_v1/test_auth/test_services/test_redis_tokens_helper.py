@@ -1,6 +1,12 @@
+import os
 from unittest import TestCase
 
 from api.api_v1.auth.services import redis_tokens
+
+print(  # noqa: T201
+    "ENV REDIS HOST",
+    os.getenv("URL_SHORTENER__REDIS__CONNECTION__HOST", "LALALALa"),
+)
 
 
 class RedisTokensHelperTestCase(TestCase):
