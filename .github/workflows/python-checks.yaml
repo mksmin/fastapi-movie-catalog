@@ -79,7 +79,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --all-extras --dev
 
-      - name: Run python tests
+      - name: Run python tests -s
         run: uv run pytest movie-catalog --cov=movie-catalog --cov-report=xml:coverage.xml --cov-report=json:coverage.json
         env:
           TESTING: 1
