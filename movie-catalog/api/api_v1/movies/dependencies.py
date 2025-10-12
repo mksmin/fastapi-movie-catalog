@@ -9,32 +9,23 @@ from fastapi import (
 )
 from fastapi.security import (
     HTTPAuthorizationCredentials,
-    HTTPBasic,
     HTTPBasicCredentials,
     HTTPBearer,
 )
 
-from api.api_v1.auth.services import redis_tokens, redis_users
+from dependencies.auth import (
+    UNSAFE_METHODS,
+    user_basic_auth,
+    validate_user_credentials,
+)
 from dependencies.movies import GetMoviesStorage
 from schemas.movies import Movie
+from services.auth import redis_tokens
 
 log = logging.getLogger(__name__)
-UNSAFE_METHODS = frozenset(
-    {
-        "DELETE",
-        "PATCH",
-        "PUT",
-        "POST",
-    },
-)
 static_api_token = HTTPBearer(
     scheme_name="Static API Token",
     description="Your **Static API token** from the developer portal. [Read more](https://ya.ru)",
-    auto_error=False,
-)
-user_basic_auth = HTTPBasic(
-    scheme_name="User Basic Auth",
-    description="Use username and password to authenticate. [Read more](https://ya.ru)",
     auto_error=False,
 )
 
@@ -84,35 +75,6 @@ def api_token_required_for_unsafe_methods(
 
     validate_api_token(
         api_token=api_token,
-    )
-
-
-def validate_user_credentials(
-    credentials: HTTPBasicCredentials | None,
-) -> None:
-
-    if credentials and redis_users.validate_user_password(
-        username=credentials.username,
-        password=credentials.password,
-    ):
-        return
-
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid username or password",
-        headers={"WWW-Authenticate": "Basic"},
-    )
-
-
-def user_basic_auth_required_for_unsafe_methods(
-    credentials: Annotated[
-        HTTPBasicCredentials | None,
-        Depends(user_basic_auth),
-    ] = None,
-) -> None:
-
-    validate_user_credentials(
-        credentials=credentials,
     )
 
 
