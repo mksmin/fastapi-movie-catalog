@@ -3,15 +3,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-Create new Movie
+Update Movie
 {% endblock %}
 {% block main %}
-<h1>Create a new Movie</h1>
+<h1>Update a Movie</h1>
 
 {{
 render_form(
-action=url_for('movies:create'),
-button_text='Create' )}}
+action='',
+button_text='Update' )}}
 {% include 'movies/components/back-to-list.html' %}
 
 {% endblock %}

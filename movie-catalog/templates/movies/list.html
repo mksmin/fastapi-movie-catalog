@@ -37,7 +37,7 @@ All Movies
             role="group"
             aria-label="Movie Actions">
           <a
-              href="#"
+              href="{{ url_for('movies:update-view', slug=movie.slug) }}"
               class="btn
             btn-outline-info">Edit</a>
           <a
