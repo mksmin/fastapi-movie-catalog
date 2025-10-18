@@ -76,7 +76,7 @@ def create_movie_random_slug(
     return storage.create(movie_in)
 
 
-@pytest.fixture()
+@pytest.fixture
 def movie() -> Generator[Movie, None, None]:
     movie = create_movie_random_slug()
     yield movie

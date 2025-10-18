@@ -13,7 +13,7 @@ from testing.conftest import create_movie_random_slug
 
 @pytest.mark.apitest
 class TestUpdate:
-    @pytest.fixture()
+    @pytest.fixture
     def movie(self, request: SubRequest) -> Generator[Movie, None, None]:
         title, description, rating = request.param
         movie = create_movie_random_slug(

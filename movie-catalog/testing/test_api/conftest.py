@@ -7,7 +7,7 @@ from main import app
 from services.auth import redis_tokens
 
 
-@pytest.fixture()
+@pytest.fixture
 def client() -> Generator[TestClient, None, None]:
     with TestClient(app) as client:
         yield client
