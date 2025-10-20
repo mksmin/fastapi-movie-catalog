@@ -22,9 +22,9 @@ RatingInteger = Annotated[
 
 
 class MovieBase(BaseModel):
-    title: str
-    description: str
-    rating: float
+    title: TitleString
+    description: DescriptionString
+    rating: RatingInteger
 
 
 class MovieCreate(MovieBase):
@@ -46,9 +46,13 @@ class MovieUpdate(MovieBase):
     Модель для обновления фильма
     """
 
-    title: TitleString
-    description: DescriptionString
-    rating: RatingInteger
+
+class MovieUpdateForm(MovieBase):
+    """
+    Модель для обновления фильма в форме
+    """
+
+    description: DescriptionString = ""
 
 
 class MovieUpdatePartial(BaseModel):
