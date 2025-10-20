@@ -18,8 +18,6 @@ from dependencies.auth import (
     user_basic_auth,
     validate_user_credentials,
 )
-from dependencies.movies import GetMoviesStorage
-from schemas.movies import Movie
 from services.auth import redis_tokens
 
 log = logging.getLogger(__name__)
@@ -28,20 +26,6 @@ static_api_token = HTTPBearer(
     description="Your **Static API token** from the developer portal. [Read more](https://ya.ru)",
     auto_error=False,
 )
-
-
-def get_movie_by_slug(
-    movie_slug: str,
-    storage: GetMoviesStorage,
-) -> Movie:
-    movie: Movie | None = storage.get_by_slug(slug=movie_slug)
-
-    if movie:
-        return movie
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Movie {movie_slug!r} not found",
-    )
 
 
 def validate_api_token(

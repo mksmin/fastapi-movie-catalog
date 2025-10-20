@@ -1,12 +1,9 @@
-from typing import Annotated
-
 from fastapi import (
     APIRouter,
-    Depends,
     status,
 )
 
-from api.api_v1.movies.dependencies import get_movie_by_slug
+from dependencies.movies import MovieBySlug
 from schemas.movies import (
     Movie,
     MovieRead,
@@ -30,11 +27,6 @@ router = APIRouter(
         },
     },
 )
-
-MovieBySlug = Annotated[
-    Movie,
-    Depends(get_movie_by_slug),
-]
 
 
 @router.get(
