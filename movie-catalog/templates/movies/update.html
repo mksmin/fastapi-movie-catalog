@@ -3,10 +3,10 @@
 {% extends "base.html" %}
 
 {% block title %}
-Update Movie
+Update Movie {{ movie.slug }}
 {% endblock %}
 {% block main %}
-<h1>Update a Movie</h1>
+<h1>Update a Movie <code>{{ movie.slug }}</code></h1>
 
 {{
 render_form(
