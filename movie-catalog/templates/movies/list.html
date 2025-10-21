@@ -40,13 +40,45 @@ All Movies
               href="{{ url_for('movies:update-view', slug=movie.slug) }}"
               class="btn
             btn-outline-info">Edit</a>
-          <a
-              href="#"
+
+          <button
+              type="button"
               class="btn
-              btn-outline-danger
-              disabled"
-              aria-disabled="true"
-              tabindex="-1">Delete</a>
+              btn-outline-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#modal-confirm-delete-{{ movie.slug }}">
+            Delete
+          </button>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade"
+             id="modal-confirm-delete-{{ movie.slug }}"
+             tabindex="-1"
+             aria-labelledby="modal-confirm-delete-{{ movie.slug }}-label"
+             aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5"
+                    id="modal-confirm-delete-{{ movie.slug }}-label">Confirm delete Movie <code>{{ movie.slug }}</code>?</h1>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete movie
+                <code>{{ movie.slug }}</code> that has title
+                <strong>{{ movie.title }}</strong>?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+          </div>
         </div>
       </td>
     </tr>
