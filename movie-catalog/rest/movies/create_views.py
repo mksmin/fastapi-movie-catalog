@@ -10,6 +10,7 @@ from fastapi.responses import (
 from pydantic import ValidationError
 
 from dependencies.movies import GetMoviesStorage
+from misc.flash_messages import flash
 from schemas.movies import MovieCreate
 from services.movies import FormResponseHelper
 from storage.movies.exceptions import MovieAlreadyExistsError
@@ -64,7 +65,11 @@ async def create_movie(
             "slug": f"Movie with slug {movie_create.slug} already exists.",
         }
     else:
-        request.session["message"] = f"Movie {movie_create.title!r} created."
+        flash(
+            request=request,
+            message=f"Movie {movie_create.title!r} created.",
+            category="success",
+        )
         return RedirectResponse(
             url=request.url_for("movies:list"),
             status_code=status.HTTP_303_SEE_OTHER,
