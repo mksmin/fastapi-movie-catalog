@@ -16,6 +16,7 @@ from schemas.movies import (
     Movie,
     MovieCreate,
     MovieUpdate,
+    MovieUpdateForm,
     MovieUpdatePartial,
 )
 from storage.movies.exceptions import MovieAlreadyExistsError
@@ -95,7 +96,7 @@ class MovieStorage(BaseModel):
     def update(
         self,
         movie: Movie,
-        movie_in: MovieUpdate,
+        movie_in: MovieUpdate | MovieUpdateForm,
     ) -> Movie:
         for field_name, value in movie_in:
             setattr(movie, field_name, value)
