@@ -62,7 +62,8 @@ All Movies
             <div class="modal-content">
               <div class="modal-header">
                 <h1 class="modal-title fs-5"
-                    id="modal-confirm-delete-{{ movie.slug }}-label">Confirm delete Movie <code>{{ movie.slug }}</code>?</h1>
+                    id="modal-confirm-delete-{{ movie.slug }}-label">Confirm delete Movie <code>{{ movie.slug }}</code>?
+                </h1>
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
@@ -75,11 +76,14 @@ All Movies
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <form
-                action="{{ url_for('movies:delete', slug=movie.slug) }}"
-                method="post">
-                  <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+                <button
+                    hx-delete="{{ url_for('movies:delete', slug=movie.slug) }}"
+                    hx-target="closest tr"
+                    hx-swap="outerHTML swap:0.5s"
+                    type="submit"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                >Delete</button>
               </div>
             </div>
           </div>
@@ -104,4 +108,13 @@ All Movies
 <h2>No Movies yet</h2>
 <h3>You can <a href="{{ url_for('movies:create-view') }}">create a new one</a></h3>
 {% endif %}
+<style>
+  tr.htmx-swapping td {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"
+        integrity="sha384-ZBXiYtYQ6hJ2Y0ZNoYuI+Nq5MqWBr+chMrS/RkXpNzQCApHEhOt2aY8EJgqwHLkJ"
+        crossorigin="anonymous"></script>
 {% endblock %}
