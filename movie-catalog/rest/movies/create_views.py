@@ -64,6 +64,7 @@ async def create_movie(
             "slug": f"Movie with slug {movie_create.slug} already exists.",
         }
     else:
+        request.session["message"] = f"Movie {movie_create.title!r} created."
         return RedirectResponse(
             url=request.url_for("movies:list"),
             status_code=status.HTTP_303_SEE_OTHER,
